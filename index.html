@@ -31,10 +31,10 @@
         <a class="nav-link" href="#home">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#screen2">Screen 2</a>
+        <a class="nav-link" href="#searchScreen">Search Screen</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#screen3">Screen 3</a>
+        <a class="nav-link" href="#searchScreenResults">Search Results</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#about">About</a>
@@ -47,11 +47,15 @@
   <div class="content" id="home">
     Home page
   </div>
-  <div class="content" id="screen2">
-    This is screen 2
+  <div class="content" id="searchScreen">
+    This is the search screen
+      <form>
+        <input type="text" placeholder="Enter a Park" id="txtPark">
+        <button id="btnSearch">Search</button>
+      </form>
   </div>
-  <div class="content" id="screen3">
-    This is screen 3
+  <div class="content" id="searchScreenResults">
+    This is search results screen
   </div>
   <div class="content" id="about">
     About 
@@ -74,13 +78,18 @@
         hideScreens();
         var target = $(this).attr("href");
         $(target).show();
-                      //https://github.com/sschul24/IT202-Proj2/blob/master/page_content/_about.html
-        $(target).load("blob/master/page_content/_" + target.replace("#","") + ".html");
       });
 
     });
   </script>
 
-
+    <script type="text/javascript">
+        var endpoint = "https://data.cityofchicago.org/resource/7piw-z6r6.json";
+        $(document).ready(function(){
+            $("#btnSearch").on("click", function(){
+                $("#searchScreen").append($("#txtPark").val());
+            });
+        });
+    </script>
   </body>
 </html>
