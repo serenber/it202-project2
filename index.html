@@ -87,7 +87,16 @@
         var endpoint = "https://data.cityofchicago.org/resource/7piw-z6r6.json";
         $(document).ready(function(){
             $("#btnSearch").on("click", function(){
-                $("#searchScreen").append($("#txtPark").val());
+                //$("#searchScreen").append($("#txtPark").val());
+               $.get(endpoint + "?park=" + $("#txtPark").val(), 
+                  function(response){
+                    $.each(response, function(i, v){
+                        var p = $("<p>");
+                        p.addClass("parkName");
+                        p.text(v.park + v.date + v.title);
+                        $("#searchScreenResults").append(p);
+                    });
+                }); 
             });
         });
     </script>
