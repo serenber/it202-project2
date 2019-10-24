@@ -59,7 +59,7 @@
           
         <!-- upcoming movies checkbox, default:checked -->
         <label for="upcoming">
-            <input id="upcoming" type="checkbox" name="upcoming" value="upcoming" checked> Upcoming
+            <input id="upcoming" type="checkbox" name="upcoming" checked> Upcoming
         </label><br>
           
         <!-- Day of the week -->
@@ -130,29 +130,49 @@
     });
   </script>
 
+<!-- Style class to modify the look of the results -->
+<style>
+  .result-text {
+    color: black;
+  }
+</style>
+    
     <!-- Script to generate the database search -->
     <script type="text/javascript">
         var endpoint = "https://data.cityofchicago.org/resource/7piw-z6r6.json";
         $(document).ready(function(){
             $("#btnSearch").on("click", function(){
                var categorySearch = $('input[name="category"]:checked').val();
-//need to grab the current date and only return results that are after that date if the check box is checked
-//need to be able to do all the categories?
-               var query = endpoint + "?" + categorySearch + "=";
-                switch(categorySearch){
-                    case "park":
-                    case "movie":
-                        query = query + $("#txtSearch").val()
-                        break;
-                    case "day":
-                        query = query + $('input[name="day"]:checked').val();
-                        break;
-                    default:
-                        console.log("please select a category");
-                        break;
-                }
+
+               if($('input[name="upcoming"]:checked').val() == "on"){
+                   var today = new Date();
+                   var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                   console.log(date);
+//need to add to query s.t. results are after current date
+               }
+
+               var queryStart = "?" + categorySearch + "=";
+               var query;
+               if(categorySearch == "park" || categorySearch == "movie"){
+                   query = endpoint + queryStart + $("#txtSearch").val()
+               }
+               if(categorySearch == "day"){
+                   query = endpoint + "?$where=day in(";
+                   //get all the checkboxes named day and loop through them, generate our query
+                   var checkboxes = document.querySelectorAll('input[name=day]:checked');
+                   for (var i=0; i<checkboxes.length; i++) {
+                       console.log(checkboxes[i].value);
+                       query = query + "\'" +checkboxes[i].value + "\'";
+                       if(i + 1 < checkboxes.length){
+                           query = query + ",";
+                       }
+                   }
+                   query = query +")";
+                   console.log(query);
+               }
                $.get( query, 
                   function(response){
+//need to clear the screen then add stuff to it
                    if(response.length == 0){//there's no responses
                        var p = $("<p>");
                         p.text("No Results");
@@ -160,8 +180,10 @@
                    }
                     $.each(response, function(i, v){
                         var p = $("<p>");
-                        p.addClass("response");
-                        p.text(v.park + v.date + v.title);
+                        p.addClass("result-text");//style class
+                        var date = v.date.slice(0, v.date.search("T"));//clean up the date so it's easier to read
+                        p.text(v.park + ": " + date + " " + v.title);
+//we'll need to save the park address in here also... I think...
                         $("#searchScreenResults").append(p);
                     });
                 }); 
