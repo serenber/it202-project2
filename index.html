@@ -146,19 +146,31 @@
                 
                var query = endpoint;
                 
+               //add to query s.t. results are after current date
                if($('input[name="upcoming"]:checked').val() == "on"){
                    var today = new Date();
                    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
                    console.log(date);
                    query = query + "?$where= date > '" + date +"'";
-//need to add to query s.t. results are after current date
                }
                 
+               //figure out what category of search we're doing
                if(categorySearch == "park" || categorySearch == "movie"){
-                   query = query + "?" + categorySearch + "=" + $("#txtSearch").val()
+                   if(query.indexOf("?$where") > -1){//check if the query has been started already
+                       query = query + "&";
+                   }
+                   else{
+                       query = query + "?";
+                   }
+                   query = query + categorySearch + "=" + $("#txtSearch").val();
                }
-               if(categorySearch == "day"){
-                   query = query + "?$where=day in(";
+               else if(categorySearch == "day"){
+                    if(query.indexOf("?$where") > -1){//check if the query has been started already
+                        query = query + "AND day in("
+                    }
+                   else{
+                       query = query + "?$where=day in(";
+                   }
                    //get all the checkboxes named day and loop through them, generate our query
                    var checkboxes = document.querySelectorAll('input[name=day]:checked');
                    for (var i=0; i<checkboxes.length; i++) {
@@ -168,6 +180,10 @@
                        }
                    }
                    query = query +")";
+               }
+               else{
+                   //tell the user to pick one
+                   $("#searchScreen").append("Please select a category");
                }
                $.get( query, 
                   function(response){
