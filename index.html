@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>3 screen app</title>
+	<title>Chicago's Movies in the Park 2019</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	 crossorigin="anonymous">
 
@@ -42,31 +42,45 @@
     </ul>
   </div>
   </nav>
-
+    
   <!-- the content divs -->
   <div class="content" id="home">
     Home page<br>
       On the search screen please type in a park name, movie title, or day of the week.<br>
       Then select the corresponding category before clicking search.<br>
   </div>
+  <!-- Search Screen div -->
   <div class="content" id="searchScreen">
     This is the search screen
       
       <form>
         <input type="text" placeholder="Find a movie" id="txtSearch">
-        <button id="btnSearch">Search</button><br>
+        <button id="btnSearch">Search</button>
           
+        <!-- upcoming movies checkbox, default:checked -->
+        <label for="upcoming">
+            <input id="upcoming" type="checkbox" name="upcoming" value="upcoming" checked> Upcoming
+        </label><br>
+         
+        <!-- Category Radio buttons -->
         Categories: 
-        <label for="park"><input id="park" type="radio" name="category" value="park"> Park Name</label>
-        <label for="movie"><input id="movie" type="radio" name="category" value="movie"> Movie Title</label>
-        <label for="day"><input id="day" type="radio" name="category" value="day"> Day of Week</label>
+        <label for="park">
+            <input id="park" value="park" type="radio" name="category"> Park Name
+        </label>
+        <label for="movie">
+            <input id="movie" value="movie" type="radio" name="category"> Movie Title
+        </label>
+        <label for="day">
+            <input id="day" value="day" type="radio" name="category"> Day of Week
+        </label>
           
       </form>
-      
   </div>
+  <!-- Results Screen div -->
   <div class="content" id="searchScreenResults">
     This is search results screen
   </div>
+  <!-- About Screen div -->
   <div class="content" id="about">
     About 
   </div>
@@ -93,6 +107,7 @@
     });
   </script>
 
+    <!-- Script to generate the database search -->
     <script type="text/javascript">
         var endpoint = "https://data.cityofchicago.org/resource/7piw-z6r6.json";
         var categorySearch = $("input[name='category']:checked"). val();
