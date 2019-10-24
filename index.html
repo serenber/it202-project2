@@ -110,11 +110,9 @@
     <!-- Script to generate the database search -->
     <script type="text/javascript">
         var endpoint = "https://data.cityofchicago.org/resource/7piw-z6r6.json";
-        var categorySearch = $("input[name='category']:checked"). val();
-//this categorySearch piece isn't working...
-        $("#searchScreen").append(categorySearch);
         $(document).ready(function(){
             $("#btnSearch").on("click", function(){
+               var categorySearch = $('input[name="category"]:checked').val();
                $.get(endpoint + "?" + categorySearch + "=" + $("#txtSearch").val(), 
                   function(response){
                     $.each(response, function(i, v){
