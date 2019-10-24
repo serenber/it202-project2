@@ -143,32 +143,31 @@
         $(document).ready(function(){
             $("#btnSearch").on("click", function(){
                var categorySearch = $('input[name="category"]:checked').val();
-
+                
+               var query = endpoint;
+                
                if($('input[name="upcoming"]:checked').val() == "on"){
                    var today = new Date();
                    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
                    console.log(date);
+                   query = query + "?$where= date > '" + date +"'";
 //need to add to query s.t. results are after current date
                }
-
-               var queryStart = "?" + categorySearch + "=";
-               var query;
+                
                if(categorySearch == "park" || categorySearch == "movie"){
-                   query = endpoint + queryStart + $("#txtSearch").val()
+                   query = query + "?" + categorySearch + "=" + $("#txtSearch").val()
                }
                if(categorySearch == "day"){
-                   query = endpoint + "?$where=day in(";
+                   query = query + "?$where=day in(";
                    //get all the checkboxes named day and loop through them, generate our query
                    var checkboxes = document.querySelectorAll('input[name=day]:checked');
                    for (var i=0; i<checkboxes.length; i++) {
-                       console.log(checkboxes[i].value);
                        query = query + "\'" +checkboxes[i].value + "\'";
                        if(i + 1 < checkboxes.length){
                            query = query + ",";
                        }
                    }
                    query = query +")";
-                   console.log(query);
                }
                $.get( query, 
                   function(response){
