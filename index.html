@@ -169,16 +169,19 @@
 
     });
   </script>
-
-<!-- Style class to modify the look of the results -->
-<style>
-  .result-text {
-    color: black;
-  }
-</style>
     
-    <!-- Script to generate the database search -->
-    <script type="text/javascript">
+    <script>
+        var map;
+      function initMap() {
+          //41.8781° N, 87.6298° W
+        var chicago = {lat: 41.8781, lng: -87.6298};
+        map = new google.maps.Map(document.getElementById('mapScreen'), {
+          zoom: 4,
+          center: chicago
+        });
+      }//end initMap()
+        
+        //generate the database query
         var endpoint = "https://data.cityofchicago.org/resource/7piw-z6r6.json";
         $(document).ready(function(){
             $("#btnSearch").on("click", function(){
@@ -263,75 +266,33 @@
                         d1.append(d2);
                         $("#searchScreenResults").append(d1);
                         
-//I'll want to save the coordinates for when I need to add the markers to the map
-  //I can get the coordinates from v.location.latitude and v.location.longitude
-  //can I add those directly to the map? or do I need to create a list to iterate over?
+                        var contentString = '<div id="content">'+
+                            '<div id="siteNotice">'+
+                            '</div>'+
+                            '<h1 id="firstHeading" class="firstHeading">' + v.park + '</h1>'+
+                            '<div id="bodyContent">'+
+                            '<p> ' + v.park_phone + ' ' + v.park_address + ' ' +
+                             v.title + ' Rating: ' + v.rating + ' ' + cc;
 
-//Each record/marker in the info window I'll need (I can just steal the cards... I think)
-  //park information
-  //movie title
-  //date
-  //rating
-  //whether or not the movie will be closed-captioned
+                        var infowindow = new google.maps.InfoWindow({
+                          content: contentString
+                        });
 
-                        
+                        var marker = new google.maps.Marker({
+                          position: {lat: parseFloat(v.location.latitude), lng: parseFloat(v.location.longitude)},
+                          map: map,
+                          title: v.park
+                        });
+                        marker.addListener('click', function() {
+                          infowindow.open(map, marker);
+                        });
                     });
                 }); 
             });
         });
     </script>
-    
-    <script>
-
-      // This example displays a marker at the center of Australia.
-      // When the user clicks the marker, an info window opens.
-
-      function initMap() {
-          //41.8781° N, 87.6298° W
-        var chicago = {lat: 41.8781, lng: -87.6298};
-        var map = new google.maps.Map(document.getElementById('mapScreen'), {
-          zoom: 4,
-          center: chicago
-        });
-
-        var contentString = '<div id="content">'+
-            '<div id="siteNotice">'+
-            '</div>'+
-            '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
-            '<div id="bodyContent">'+
-            '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-            'sandstone rock formation in the southern part of the '+
-            'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-            'south west of the nearest large town, Alice Springs; 450&#160;km '+
-            '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
-            'features of the Uluru - Kata Tjuta National Park. Uluru is '+
-            'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-            'Aboriginal people of the area. It has many springs, waterholes, '+
-            'rock caves and ancient paintings. Uluru is listed as a World '+
-            'Heritage Site.</p>'+
-            '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
-            'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
-            '(last visited June 22, 2009).</p>'+
-            '</div>'+
-            '</div>';
-
-        var infowindow = new google.maps.InfoWindow({
-          content: contentString
-        });
-
-        var marker = new google.maps.Marker({
-          position: chicago,
-          map: map,
-          title: 'Uluru (Ayers Rock)'
-        });
-        marker.addListener('click', function() {
-          infowindow.open(map, marker);
-        });
-      }
-    </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCapZ69aCbon_uaFxqK_SmrMXmRCocI9jQ&callback=initMap">
     </script>
-    
   </body>
 </html>
