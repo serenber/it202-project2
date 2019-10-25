@@ -16,6 +16,20 @@
 		}
 	</style>
 
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #mapScreen {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    
 </head>
 
 <body>
@@ -36,6 +50,9 @@
       <li class="nav-item">
         <a class="nav-link" href="#searchScreenResults">Search Results</a>
       </li>
+        <li class="nav-item">
+        <a class="nav-link" href="#mapScreen">Map Screen</a>
+      </li>
       <li class="nav-item">
         <a class="nav-link" href="#about">About</a>
       </li>
@@ -45,13 +62,15 @@
     
   <!-- the content divs -->
   <div class="content" id="home">
-    Home page<br>
-      On the search screen please type in a park name, movie title, or day of the week.<br>
-      Then select the corresponding category before clicking search.<br>
+      <h1 style="font-weight:bold">Home page</h1>
+    <p style="color:gray">
+        On the search screen please type in a park name, movie title, or day of the week.<br>
+        Then select the corresponding category before clicking search.
+    </p>
   </div>
   <!-- Search Screen div -->
   <div class="content" id="searchScreen">
-    This is the search screen
+      <p>This is the search screen</p>
       
       <form>
         <input type="text" placeholder="Find a movie" id="txtSearch">
@@ -101,7 +120,16 @@
   </div>
   <!-- Results Screen div -->
   <div class="content" id="searchScreenResults">
-    This is search results screen
+      <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">This is search results screen</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Make a search to add content here</h6>
+          </div>
+        </div>
+    
+  </div>
+  <!-- Map Screen div -->
+  <div class="content" id="mapScreen">
   </div>
   <!-- About Screen div -->
   <div class="content" id="about">
@@ -245,10 +273,65 @@
   //date
   //rating
   //whether or not the movie will be closed-captioned
+
+                        
                     });
                 }); 
             });
         });
     </script>
+    
+    <script>
+
+      // This example displays a marker at the center of Australia.
+      // When the user clicks the marker, an info window opens.
+
+      function initMap() {
+          //41.8781° N, 87.6298° W
+        var chicago = {lat: 41.8781, lng: -87.6298};
+        var map = new google.maps.Map(document.getElementById('mapScreen'), {
+          zoom: 4,
+          center: chicago
+        });
+
+        var contentString = '<div id="content">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+            '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+            '<div id="bodyContent">'+
+            '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+            'sandstone rock formation in the southern part of the '+
+            'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+            'south west of the nearest large town, Alice Springs; 450&#160;km '+
+            '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
+            'features of the Uluru - Kata Tjuta National Park. Uluru is '+
+            'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+            'Aboriginal people of the area. It has many springs, waterholes, '+
+            'rock caves and ancient paintings. Uluru is listed as a World '+
+            'Heritage Site.</p>'+
+            '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+            'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+            '(last visited June 22, 2009).</p>'+
+            '</div>'+
+            '</div>';
+
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+
+        var marker = new google.maps.Marker({
+          position: chicago,
+          map: map,
+          title: 'Uluru (Ayers Rock)'
+        });
+        marker.addListener('click', function() {
+          infowindow.open(map, marker);
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCapZ69aCbon_uaFxqK_SmrMXmRCocI9jQ&callback=initMap">
+    </script>
+    
   </body>
 </html>
