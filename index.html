@@ -126,11 +126,12 @@
             <h6 class="card-subtitle mb-2 text-muted">Make a search to add content here</h6>
           </div>
         </div>
-    
   </div>
+    
   <!-- Map Screen div -->
   <div class="content" id="mapScreen">
   </div>
+    
   <!-- About Screen div -->
   <div class="content" id="about">
       <style>
@@ -172,6 +173,7 @@
     
     <script>
         var map;
+        var markers = [];
       function initMap() {
           //41.8781° N, 87.6298° W
         var chicago = {lat: 41.8781, lng: -87.6298};
@@ -230,8 +232,15 @@
                }
                $.get( query, 
                   function(response){
-//need to clear the screen then add stuff to it
-  //Is there some way to check if there's cards and if there is remove them?
+                   //clear the screen then add stuff to it
+                   document.getElementById("searchScreenResults").innerHTML = "";
+                   
+                    //remove the markers from the map
+                    for (var i = 0; i < markers.length; i++) {
+                        markers[i].setMap(null);
+                    }
+                    markers = [];
+                   
                    if(response.length == 0){//there's no responses
                         var d1 = $("<div>"); d1.addClass("card");
                         var d2 = $("<div>"); d2.addClass("card-body");
@@ -251,21 +260,22 @@
                             cc = "Not Closed Captioned";
                         }
                         
+                        //create the card element for the search results screen
                         var d1 = $("<div>"); d1.addClass("card");
                         var d2 = $("<div>"); d2.addClass("card-body");
                         var h5 = $("<h5>"); h5.addClass("card-title");
                           h5.text(v.title + " " + date);
+                          d2.append(h5);
                         var h6 = $("<h5>"); h6.addClass("card-subtitle mb-2 text-muted");
                           h6.text("Rating: " + v.rating + " " + cc);
+                          d2.append(h6);
                         var p1 = $("<p>"); p1.addClass("card-text"); p1.addClass("font-weight:bold");
                           p1.text(v.park + " " + v.park_phone + " " + v.park_address);
-                        
-                        d2.append(h5);
-                        d2.append(h6);
-                        d2.append(p1);
+                          d2.append(p1);
                         d1.append(d2);
                         $("#searchScreenResults").append(d1);
                         
+                        //create the info window and marker for the map
                         var contentString = '<div id="content">'+
                             '<div id="siteNotice">'+
                             '</div>'+
@@ -286,13 +296,16 @@
                         marker.addListener('click', function() {
                           infowindow.open(map, marker);
                         });
+                        markers.push(marker);//add the marker to the array
                     });
                 }); 
             });
         });
     </script>
+    
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCapZ69aCbon_uaFxqK_SmrMXmRCocI9jQ&callback=initMap">
     </script>
+    
   </body>
 </html>
