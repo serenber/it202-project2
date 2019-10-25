@@ -105,7 +105,19 @@
   </div>
   <!-- About Screen div -->
   <div class="content" id="about">
-    About 
+      <style>
+          .larger-text {
+          font-size: 20px;
+      }
+      </style>
+    <h1 style="font-weight:bold">About</h1>
+    <p class="larger-text">The app name: Chicago's Movies in the Park for 2019</p>
+    <p style="color:gray">
+        This is in reference to the database that this app is working with.<br>
+        It could be changed later to another if you choose :)
+    </p>
+    <p class="larger-text">Developer: Serena Schultz</p>
+    <p class="larger-text">GitHub repo <a href="https://github.com/sschul24/IT202-Proj2" target="_blank">link</a></p>
   </div>
 
 
@@ -198,7 +210,9 @@
                         p.addClass("result-text");//style class
                         var date = v.date.slice(0, v.date.search("T"));//clean up the date so it's easier to read
                         p.text(v.park + ": " + date + " " + v.title);
-//we'll need to save the park address in here also... I think...
+//I should figure out how to have cards or "styled rows of display text"
+//I'll want to save the coordinates for when I need to add the markers to the map
+  //can I add those directly to the map? or do I need to create a list to iterate over?
                         $("#searchScreenResults").append(p);
                     });
                 }); 
