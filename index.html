@@ -200,19 +200,51 @@
                $.get( query, 
                   function(response){
 //need to clear the screen then add stuff to it
+  //Is there some way to check if there's cards and if there is remove them?
                    if(response.length == 0){//there's no responses
-                       var p = $("<p>");
-                        p.text("No Results");
-                        $("#searchScreenResults").append(p);
+                        var d1 = $("<div>"); d1.addClass("card");
+                        var d2 = $("<div>"); d2.addClass("card-body");
+                        var h5 = $("<h5>"); h5.addClass("card-title");
+                          h5.text("No Results");
+                        d2.append(h5);
+                        d1.append(d2);
+                        $("#searchScreenResults").append(d1);
                    }
                     $.each(response, function(i, v){
-                        var p = $("<p>");
-                        p.addClass("result-text");//style class
                         var date = v.date.slice(0, v.date.search("T"));//clean up the date so it's easier to read
-                        p.text(v.park + ": " + date + " " + v.title);
-//I should figure out how to have cards or "styled rows of display text"
+                        var cc;
+                        if(v.cc == "Y"){
+                            cc = "Closed Captioned";
+                        }
+                        else{
+                            cc = "Not Closed Captioned";
+                        }
+                        
+                        var d1 = $("<div>"); d1.addClass("card");
+                        var d2 = $("<div>"); d2.addClass("card-body");
+                        var h5 = $("<h5>"); h5.addClass("card-title");
+                          h5.text(v.title + " " + date);
+                        var h6 = $("<h5>"); h6.addClass("card-subtitle mb-2 text-muted");
+                          h6.text("Rating: " + v.rating + " " + cc);
+                        var p1 = $("<p>"); p1.addClass("card-text"); p1.addClass("font-weight:bold");
+                          p1.text(v.park + " " + v.park_phone + " " + v.park_address);
+                        
+                        d2.append(h5);
+                        d2.append(h6);
+                        d2.append(p1);
+                        d1.append(d2);
+                        $("#searchScreenResults").append(d1);
+                        
 //I'll want to save the coordinates for when I need to add the markers to the map
+  //I can get the coordinates from v.location.latitude and v.location.longitude
   //can I add those directly to the map? or do I need to create a list to iterate over?
+
+//Each record/marker in the info window I'll need (I can just steal the cards... I think)
+  //park information
+  //movie title
+  //date
+  //rating
+  //whether or not the movie will be closed-captioned
                         $("#searchScreenResults").append(p);
                     });
                 }); 
